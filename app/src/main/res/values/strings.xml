@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SatisfyingToDoList</string>
+    <string name="tab_text_1">Today</string>
+    <string name="tab_text_2">Tomorrow</string>
+</resources>

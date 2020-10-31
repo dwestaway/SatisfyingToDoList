@@ -6,11 +6,13 @@ public class ListItemModel {
 
     String taskText;
     ImageButton doneButton;
+    Boolean taskDone;
 
 
-    public ListItemModel(String todoText) {
+    public ListItemModel(String todoText, Boolean taskDone) {
 
         this.taskText = todoText;
+        this.taskDone = taskDone;
     }
 
     public String getTaskText() {
@@ -24,7 +26,12 @@ public class ListItemModel {
     public ImageButton getDoneButton() {
         return doneButton;
     }
-    public void taskDone() {
 
+    public Boolean getTaskDone() {
+        return taskDone;
+    }
+
+    public void setTaskDone(Boolean taskDone) {
+        this.taskDone = taskDone;
     }
 }

@@ -10,8 +10,11 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dwestaway.satisfyingtodolist.ListItemModel;
+import com.dwestaway.satisfyingtodolist.MainActivity;
 import com.dwestaway.satisfyingtodolist.R;
 
 import java.util.ArrayList;
@@ -27,7 +30,9 @@ public class Fragment_main1 extends Fragment {
 
     private ListAdapter listAdapter;
 
-    private Boolean isDone;
+    public Boolean deleteMode;
+
+    public MainActivity mainActivity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,11 +40,11 @@ public class Fragment_main1 extends Fragment {
 
 
 
+
+
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        isDone = false;
 
         listView = getView().findViewById(R.id.listView);
 
@@ -53,30 +58,66 @@ public class Fragment_main1 extends Fragment {
 
         modelArrayList.add(new ListItemModel("Meditate", false));
 
+        //get main activity to access variables from it
+        mainActivity = (MainActivity) getActivity();
+
+        deleteMode = false;
 
 
-        //setup adapter
-        listAdapter = new ListAdapter(getActivity(), modelArrayList);
-        //set adapter to listView
-        listView.setAdapter(listAdapter);
+        loadAdapter();
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(modelArrayList.get(position).getTaskDone() == false)
+                deleteMode = mainActivity.delete;
+
+                if(deleteMode == false)
                 {
-                    view.setBackgroundColor(getResources().getColor(R.color.green));
-                    modelArrayList.get(position).setTaskDone(true);
+                    if(modelArrayList.get(position).getTaskDone() == false)
+                    {
+                        view.setBackgroundColor(getResources().getColor(R.color.green));
+                        modelArrayList.get(position).setTaskDone(true);
+                    }
+                    else if(modelArrayList.get(position).getTaskDone() == true)
+                    {
+                        view.setBackgroundColor(getResources().getColor(R.color.lightGrey));
+                        modelArrayList.get(position).setTaskDone(false);
+                    }
                 }
-                else if(modelArrayList.get(position).getTaskDone() == true)
+                else if(deleteMode == true)
                 {
-                    view.setBackgroundColor(getResources().getColor(R.color.lightGrey));
-                    modelArrayList.get(position).setTaskDone(false);
+                    modelArrayList.remove(position);
+
+                    loadAdapter();
                 }
+
+
 
             }
         });
+
+        //deleteMode(listView);
+
+        View view2;
+
+        view2 = listAdapter.getView(listView.getFirstVisiblePosition() + 0, null, listView);
+
+        view2.setBackgroundColor(getResources().getColor(R.color.red));
+
+
+
     }
+
+    private void loadAdapter() {
+        //setup adapter
+        listAdapter = new ListAdapter(getActivity(), modelArrayList);
+        //set adapter to listView
+        listView.setAdapter(listAdapter);
+    }
+
+
 
 }

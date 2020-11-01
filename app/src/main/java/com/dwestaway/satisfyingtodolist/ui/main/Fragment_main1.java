@@ -39,11 +39,8 @@ public class Fragment_main1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
-
-
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -59,16 +56,18 @@ public class Fragment_main1 extends Fragment {
 
         modelArrayList.add(new ListItemModel("Meditate", false));
 
+
+
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
 
+        //set task deleting mode to false by default
         deleteMode = false;
-
 
         loadAdapter();
 
 
-
+        //when a task is clicked, turn green and set task to completed, or if delete mode is enabled; delete the task
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

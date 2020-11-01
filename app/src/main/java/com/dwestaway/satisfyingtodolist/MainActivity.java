@@ -7,12 +7,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Boolean delete = false;
 
+    public Boolean newTaskViewVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,17 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+
+        //access the ConstraintLayout that holds the new task view and hide it by default
+        final ConstraintLayout newTaskLayout =  findViewById(R.id.newTaskLayout);
+        newTaskLayout.setVisibility(View.GONE);
+
+        final EditText newTaskEditText = findViewById(R.id.newTask);
+
         final ImageButton deleteButton = findViewById(R.id.deleteButton);
         deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_forever_24);
+
+
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +76,32 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                if(newTaskViewVisible == false)
+                {
+                    newTaskLayout.setVisibility(View.VISIBLE);
+
+                    newTaskViewVisible = true;
+                }
+                else if(newTaskViewVisible == true)
+                {
+                    newTaskLayout.setVisibility(View.GONE);
+
+                    newTaskViewVisible = false;
+
+                    String newTaskString = newTaskEditText.getText().toString();
+
+                    //if new task is not empty
+                    if(!newTaskString.matches(""))
+                    {
+                        Toast.makeText(getApplicationContext(), "text view is not empty", Toast.LENGTH_LONG).show();
+
+                        newTaskEditText.setText("");
+                    }
+                }
+
+
 
             }
         });

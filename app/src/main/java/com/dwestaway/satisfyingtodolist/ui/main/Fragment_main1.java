@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -80,6 +81,8 @@ public class Fragment_main1 extends Fragment {
                     {
                         view.setBackgroundColor(getResources().getColor(R.color.green));
                         modelArrayList.get(position).setTaskDone(true);
+
+                        checkIfAllTasksDone();
                     }
                     else if(modelArrayList.get(position).getTaskDone() == true)
                     {
@@ -109,6 +112,24 @@ public class Fragment_main1 extends Fragment {
 
 
 
+    }
+
+    private void checkIfAllTasksDone() {
+
+        int tasksDoneCount = 0;
+
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            if (modelArrayList.get(i).getTaskDone() == true)
+            {
+                tasksDoneCount++;
+
+                if(tasksDoneCount == modelArrayList.size())
+                {
+                    Toast.makeText(getContext(), "Today's tasks completed, well done!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     private void loadAdapter() {

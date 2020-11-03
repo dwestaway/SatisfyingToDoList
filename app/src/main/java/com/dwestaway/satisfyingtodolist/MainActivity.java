@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         newTaskLayout.setVisibility(View.GONE);
 
         final EditText newTaskEditText = findViewById(R.id.newTask);
-        
+
         //set tab text colours
         tabs.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.textGrey));
 

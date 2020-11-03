@@ -80,24 +80,7 @@ public class Fragment_main1 extends Fragment {
                     modelArrayList.get(position).setTaskDone(false);
                 }
 
-                //loop through all list items and set colour depending on if task is completed
-                for(int i = 0; i < modelArrayList.size(); i++)
-                {
-                    View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
-
-                    if(listItem != null)
-                    {
-                        if(modelArrayList.get(i).getTaskDone() == true)
-                        {
-                            listItem.setBackgroundColor(getResources().getColor(R.color.green));
-                        }
-                        else
-                        {
-                            listItem.setBackgroundColor(getResources().getColor(R.color.lightGrey));
-                        }
-                    }
-
-                }
+                setTaskColours(parent);
 
             }
         });
@@ -111,6 +94,8 @@ public class Fragment_main1 extends Fragment {
                 listAdapter.notifyDataSetChanged();
 
                 checkIfAllTasksDone();
+
+                setTaskColours(parent);
 
                 return true;
             }
@@ -149,6 +134,31 @@ public class Fragment_main1 extends Fragment {
     public static void newTask(String task) {
 
         modelArrayList.add(new ListItemModel(task, false));
+    }
+
+    /* Loop through all tasks and set colour to green if task is done, else set to grey,
+        this must be called after any changes to tasks
+     */
+    private void setTaskColours(AdapterView<?> parent)
+    {
+
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
+
+            if(listItem != null)
+            {
+                if(modelArrayList.get(i).getTaskDone() == true)
+                {
+                    listItem.setBackgroundColor(getResources().getColor(R.color.green));
+                }
+                else
+                {
+                    listItem.setBackgroundColor(getResources().getColor(R.color.lightGrey));
+                }
+            }
+
+        }
     }
 
 

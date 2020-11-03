@@ -50,6 +50,7 @@ public class ListAdapter extends BaseAdapter {
         text.setText(listItemModel.getTaskText());
 
         return convertView;
+
     }
 
 

@@ -84,7 +84,7 @@
         android:id="@+id/newTaskLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lightGrey"
+        android:background="@color/blue"
         android:paddingTop="9dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"

@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
                     //if new task is not empty
                     if(!newTaskString.matches(""))
                     {
-                        Toast.makeText(getApplicationContext(), "text view is not empty", Toast.LENGTH_LONG).show();
+                        //send task to fragment
+                        Fragment_main1.newTask(newTaskString);
 
                         newTaskEditText.setText("");
                     }

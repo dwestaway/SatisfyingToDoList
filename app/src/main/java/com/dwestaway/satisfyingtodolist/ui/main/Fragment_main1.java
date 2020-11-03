@@ -27,7 +27,7 @@ public class Fragment_main1 extends Fragment {
     //private RecyclerView recyclerView;
     private ListView listView;
 
-    private ArrayList<ListItemModel> modelArrayList;
+    private static ArrayList<ListItemModel> modelArrayList;
 
     private ListAdapter listAdapter;
 
@@ -64,7 +64,10 @@ public class Fragment_main1 extends Fragment {
         //set task deleting mode to false by default
         deleteMode = false;
 
-        loadAdapter();
+        //setup adapter
+        listAdapter = new ListAdapter(getActivity(), modelArrayList);
+        //set adapter to listView
+        listView.setAdapter(listAdapter);
 
 
         //when a task is clicked, turn green and set task to completed, or if delete mode is enabled; delete the task
@@ -78,28 +81,49 @@ public class Fragment_main1 extends Fragment {
                 {
                     if(modelArrayList.get(position).getTaskDone() == false)
                     {
-                        view.setBackgroundColor(getResources().getColor(R.color.green));
                         modelArrayList.get(position).setTaskDone(true);
 
                         checkIfAllTasksDone();
                     }
                     else if(modelArrayList.get(position).getTaskDone() == true)
                     {
-                        view.setBackgroundColor(getResources().getColor(R.color.lightGrey));
                         modelArrayList.get(position).setTaskDone(false);
                     }
+
                 }
                 else if(deleteMode == true)
                 {
                     modelArrayList.remove(position);
 
-                    loadAdapter();
+                    listAdapter.notifyDataSetChanged();
+
+                    checkIfAllTasksDone();
+
                 }
 
+                //loop through all list items and set colour depending on if task is completed
+                for(int i = 0; i < modelArrayList.size(); i++)
+                {
+                    View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
 
+                    if(listItem != null)
+                    {
+                        if(modelArrayList.get(i).getTaskDone() == true)
+                        {
+                            listItem.setBackgroundColor(getResources().getColor(R.color.green));
+                        }
+                        else
+                        {
+                            listItem.setBackgroundColor(getResources().getColor(R.color.lightGrey));
+                        }
+                    }
+
+                }
 
             }
         });
+
+        
 
         //deleteMode(listView);
 
@@ -131,11 +155,9 @@ public class Fragment_main1 extends Fragment {
         }
     }
 
-    private void loadAdapter() {
-        //setup adapter
-        listAdapter = new ListAdapter(getActivity(), modelArrayList);
-        //set adapter to listView
-        listView.setAdapter(listAdapter);
+    public static void newTask(String task) {
+
+        modelArrayList.add(new ListItemModel(task, false));
     }
 
 

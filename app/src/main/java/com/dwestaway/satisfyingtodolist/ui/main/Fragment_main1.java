@@ -89,7 +89,11 @@ public class Fragment_main1 extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //remove the task from modelArrayList
                 modelArrayList.remove(position);
+
+                //remove the task's view from listView (prevents task colour bugs when adding new tasks)
+                parent.removeViewInLayout(view);
 
                 listAdapter.notifyDataSetChanged();
 
@@ -100,15 +104,6 @@ public class Fragment_main1 extends Fragment {
                 return true;
             }
         });
-
-        //deleteMode(listView);
-
-        View view2;
-
-        view2 = listAdapter.getView(listView.getFirstVisiblePosition() + 0, null, listView);
-
-        view2.setBackgroundColor(getResources().getColor(R.color.red));
-
 
 
     }
@@ -134,6 +129,7 @@ public class Fragment_main1 extends Fragment {
     public static void newTask(String task) {
 
         modelArrayList.add(new ListItemModel(task, false));
+
     }
 
     /* Loop through all tasks and set colour to green if task is done, else set to grey,

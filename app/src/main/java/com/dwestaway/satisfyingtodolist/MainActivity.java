@@ -22,8 +22,6 @@ import com.dwestaway.satisfyingtodolist.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Boolean delete = false;
-
     public Boolean newTaskViewVisible = false;
 
     @Override
@@ -43,33 +41,7 @@ public class MainActivity extends AppCompatActivity {
         newTaskLayout.setVisibility(View.GONE);
 
         final EditText newTaskEditText = findViewById(R.id.newTask);
-
-        final ImageButton deleteButton = findViewById(R.id.deleteButton);
-        deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_forever_24);
-
-
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(delete == false)
-                {
-                    delete = true;
-
-                    deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_24);
-
-                    Toast.makeText(getApplicationContext(), "Press task to delete", Toast.LENGTH_SHORT).show();
-                }
-                else if (delete == true)
-                {
-                    delete = false;
-
-                    deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_forever_24);
-                }
-            }
-        });
-
+        
         //set tab text colours
         tabs.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.textGrey));
 

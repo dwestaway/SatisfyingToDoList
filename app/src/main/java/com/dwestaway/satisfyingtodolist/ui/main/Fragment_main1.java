@@ -23,15 +23,11 @@ import java.util.ArrayList;
 
 public class Fragment_main1 extends Fragment {
 
-    //private ViewPager viewPager;
-    //private RecyclerView recyclerView;
     private ListView listView;
 
     private static ArrayList<ListItemModel> modelArrayList;
 
     private ListAdapter listAdapter;
-
-    public Boolean deleteMode;
 
     public MainActivity mainActivity;
 
@@ -61,9 +57,6 @@ public class Fragment_main1 extends Fragment {
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
 
-        //set task deleting mode to false by default
-        deleteMode = false;
-
         //setup adapter
         listAdapter = new ListAdapter(getActivity(), modelArrayList);
         //set adapter to listView
@@ -75,30 +68,16 @@ public class Fragment_main1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                deleteMode = mainActivity.delete;
 
-                if(deleteMode == false)
+                if(modelArrayList.get(position).getTaskDone() == false)
                 {
-                    if(modelArrayList.get(position).getTaskDone() == false)
-                    {
-                        modelArrayList.get(position).setTaskDone(true);
-
-                        checkIfAllTasksDone();
-                    }
-                    else if(modelArrayList.get(position).getTaskDone() == true)
-                    {
-                        modelArrayList.get(position).setTaskDone(false);
-                    }
-
-                }
-                else if(deleteMode == true)
-                {
-                    modelArrayList.remove(position);
-
-                    listAdapter.notifyDataSetChanged();
+                    modelArrayList.get(position).setTaskDone(true);
 
                     checkIfAllTasksDone();
-
+                }
+                else if(modelArrayList.get(position).getTaskDone() == true)
+                {
+                    modelArrayList.get(position).setTaskDone(false);
                 }
 
                 //loop through all list items and set colour depending on if task is completed
@@ -123,7 +102,19 @@ public class Fragment_main1 extends Fragment {
             }
         });
 
-        
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                modelArrayList.remove(position);
+
+                listAdapter.notifyDataSetChanged();
+
+                checkIfAllTasksDone();
+
+                return true;
+            }
+        });
 
         //deleteMode(listView);
 

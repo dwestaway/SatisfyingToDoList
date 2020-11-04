@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.dwestaway.satisfyingtodolist.R;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class Fragment_main2 extends Fragment {
 
     @Override

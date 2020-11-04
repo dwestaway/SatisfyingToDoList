@@ -5,6 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.dwestaway.satisfyingtodolist.ListItemModel;
 import com.dwestaway.satisfyingtodolist.R;
 
@@ -49,10 +52,15 @@ public class ListAdapter extends BaseAdapter {
 
         text.setText(listItemModel.getTaskText());
 
+        ConstraintLayout constraintLayout = convertView.findViewById(R.id.constraintLayout);
+
+        //access the correct task and set its colour here?
+
+        //constraintLayout.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.green));
+
         return convertView;
 
     }
-
 
 
 }

@@ -1,5 +1,7 @@
 package com.dwestaway.satisfyingtodolist.ui.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dwestaway.satisfyingtodolist.ListItemModel;
 import com.dwestaway.satisfyingtodolist.MainActivity;
 import com.dwestaway.satisfyingtodolist.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -29,7 +34,7 @@ public class Fragment_main1 extends Fragment {
 
     private ListAdapter listAdapter;
 
-    public MainActivity mainActivity;
+    public static MainActivity mainActivity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,17 +47,12 @@ public class Fragment_main1 extends Fragment {
 
         listView = getView().findViewById(R.id.listView);
 
-        //create array for list items
-        modelArrayList = new ArrayList<>();
-
-        //add list items
-        modelArrayList.add(new ListItemModel("Stretch", false));
-
-        modelArrayList.add(new ListItemModel("Workout", false));
-
-        modelArrayList.add(new ListItemModel("Meditate", false));
 
 
+        loadData();
+
+        //fix this, does not remember colours set
+        setTaskColours(listView);
 
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
@@ -61,6 +61,16 @@ public class Fragment_main1 extends Fragment {
         listAdapter = new ListAdapter(getActivity(), modelArrayList);
         //set adapter to listView
         listView.setAdapter(listAdapter);
+
+        View view1 = listAdapter.getView(listView.getFirstVisiblePosition(), null, listView);
+
+        //access the correct task and set its colour here?
+
+        //view1.getRootView().setBackgroundColor(getResources().getColor(R.color.red));
+
+        view1.findViewById(R.id.constraintLayout).setBackgroundColor(mainActivity.getResources().getColor(R.color.red));
+
+
 
 
         //when a task is clicked, turn green and set task to completed, or if delete mode is enabled; delete the task
@@ -82,6 +92,8 @@ public class Fragment_main1 extends Fragment {
 
                 setTaskColours(parent);
 
+                saveData();
+
             }
         });
 
@@ -101,11 +113,51 @@ public class Fragment_main1 extends Fragment {
 
                 setTaskColours(parent);
 
+                saveData();
+
                 return true;
             }
         });
 
+    }
 
+    //save tasks into local storage
+    private static void saveData() {
+
+        //get instance of sharedPreferences
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+
+        //save the task arraylist as a string
+        String json = gson.toJson(modelArrayList);
+
+        //save the string to sharedPreferences
+        editor.putString("task list", json);
+        editor.apply();
+    }
+    //load tasks from local storage
+    private void loadData() {
+
+        //get instance of sharedPreferences
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+
+        //get tasks from sharedPreferences as a string
+        String json = sharedPreferences.getString("task list", null);
+
+        Type type = new TypeToken<ArrayList<ListItemModel>>() {}.getType();
+
+        //load string into task array list
+        modelArrayList = gson.fromJson(json, type);
+
+        //if no list is stored, create one
+        if (modelArrayList == null) {
+
+            modelArrayList = new ArrayList<> ();
+        }
     }
 
     private void checkIfAllTasksDone() {
@@ -129,6 +181,8 @@ public class Fragment_main1 extends Fragment {
     public static void newTask(String task) {
 
         modelArrayList.add(new ListItemModel(task, false));
+
+        saveData();
 
     }
 

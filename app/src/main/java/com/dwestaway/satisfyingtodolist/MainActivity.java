@@ -1,10 +1,10 @@
 package com.dwestaway.satisfyingtodolist;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main1;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -24,14 +25,16 @@ public class MainActivity extends AppCompatActivity {
 
     public Boolean newTaskViewVisible = false;
 
+    public int currentTab = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
+        final TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
@@ -48,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                 if(newTaskViewVisible == false)
                 {
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 {
                     newTaskLayout.setVisibility(View.GONE);
 
+                    hideKeyBoard();
+
                     newTaskViewVisible = false;
 
                     String newTaskString = newTaskEditText.getText().toString();
@@ -67,8 +71,17 @@ public class MainActivity extends AppCompatActivity {
                     //if new task is not empty
                     if(!newTaskString.matches(""))
                     {
-                        //send task to fragment
-                        Fragment_main1.newTask(newTaskString);
+
+                        //if "today" tab is selected
+                        if(tabs.getSelectedTabPosition() == 0)
+                        {
+                            //send task to fragment
+                            Fragment_main1.newTask(newTaskString);
+                        }
+                        else
+                        {
+                            //add new task to tomorrow tab
+                        }
 
                         newTaskEditText.setText("");
                     }
@@ -78,5 +91,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void hideKeyBoard() {
+        View view1 = this.getCurrentFocus();
+        if(view1 != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+        }
     }
 }

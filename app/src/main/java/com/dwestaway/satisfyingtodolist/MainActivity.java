@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         newTaskLayout.setVisibility(View.GONE);
 
         final EditText newTaskEditText = findViewById(R.id.newTask);
+        final CheckBox everydayCheckBox = findViewById(R.id.everydayCheckBox);
 
         //set tab text colours
         tabs.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.textGrey));
@@ -68,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
                     String newTaskString = newTaskEditText.getText().toString();
 
+                    Boolean everyday = false;
+
+                    if(everydayCheckBox.isChecked())
+                    {
+                        everyday = true;
+                    }
+
                     //if new task is not empty
                     if(!newTaskString.matches(""))
                     {
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         if(tabs.getSelectedTabPosition() == 0)
                         {
                             //send task to fragment
-                            Fragment_main1.newTask(newTaskString);
+                            Fragment_main1.newTask(newTaskString, everyday);
                         }
                         else
                         {

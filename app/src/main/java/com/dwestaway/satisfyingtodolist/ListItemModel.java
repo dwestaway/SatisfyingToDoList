@@ -6,12 +6,14 @@ public class ListItemModel {
 
     String taskText;
     Boolean taskDone;
+    Boolean everyday;
 
 
-    public ListItemModel(String todoText, Boolean taskDone) {
+    public ListItemModel(String todoText, Boolean taskDone, Boolean everyday) {
 
         this.taskText = todoText;
         this.taskDone = taskDone;
+        this.everyday = everyday;
     }
 
     public String getTaskText() {
@@ -24,5 +26,9 @@ public class ListItemModel {
 
     public void setTaskDone(Boolean taskDone) {
         this.taskDone = taskDone;
+    }
+
+    public Boolean getEveryday() {
+        return everyday;
     }
 }

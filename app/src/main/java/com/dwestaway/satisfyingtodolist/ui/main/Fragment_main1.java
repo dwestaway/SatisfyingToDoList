@@ -195,9 +195,9 @@ public class Fragment_main1 extends Fragment {
         }
     }
 
-    public static void newTask(String task) {
+    public static void newTask(String task, Boolean everyday) {
 
-        modelArrayList.add(new ListItemModel(task, false));
+        modelArrayList.add(new ListItemModel(task, false, everyday));
 
         saveData();
 

@@ -48,15 +48,18 @@ public class ListAdapter extends BaseAdapter {
 
         TextView text = convertView.findViewById(R.id.cardText);
 
+        ConstraintLayout constraintLayout = convertView.findViewById(R.id.constraintLayout);
+
         ListItemModel listItemModel = modelArrayList.get(position);
 
         text.setText(listItemModel.getTaskText());
 
-        ConstraintLayout constraintLayout = convertView.findViewById(R.id.constraintLayout);
+        //if task is complete, set colour to green, this fixes completed tasks being grey when app is opened
+        if(listItemModel.getTaskDone() == true)
+        {
+            constraintLayout.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.taskDone));
 
-        //access the correct task and set its colour here?
-
-        //constraintLayout.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.green));
+        }
 
         return convertView;
 

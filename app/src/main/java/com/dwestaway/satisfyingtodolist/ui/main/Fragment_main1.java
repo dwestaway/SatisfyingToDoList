@@ -62,16 +62,6 @@ public class Fragment_main1 extends Fragment {
         //set adapter to listView
         listView.setAdapter(listAdapter);
 
-        View view1 = listAdapter.getView(listView.getFirstVisiblePosition(), null, listView);
-
-        //access the correct task and set its colour here?
-
-        //view1.getRootView().setBackgroundColor(getResources().getColor(R.color.red));
-
-        view1.findViewById(R.id.constraintLayout).setBackgroundColor(mainActivity.getResources().getColor(R.color.red));
-
-
-
 
         //when a task is clicked, turn green and set task to completed, or if delete mode is enabled; delete the task
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -200,11 +190,11 @@ public class Fragment_main1 extends Fragment {
             {
                 if(modelArrayList.get(i).getTaskDone() == true)
                 {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.green));
+                    listItem.setBackgroundColor(getResources().getColor(R.color.taskDone));
                 }
                 else
                 {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.lightGrey));
+                    listItem.setBackgroundColor(getResources().getColor(R.color.task));
                 }
             }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main1;
+import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -82,14 +83,18 @@ public class MainActivity extends AppCompatActivity {
                     {
 
                         //if "today" tab is selected
-                        if(tabs.getSelectedTabPosition() == 0)
+                        if(everyday == true)
                         {
-                            //send task to fragment
+                            Fragment_main1.newTask(newTaskString, everyday);
+                            Fragment_main2.newTask(newTaskString, everyday);
+                        }
+                        else if(tabs.getSelectedTabPosition() == 0)
+                        {
                             Fragment_main1.newTask(newTaskString, everyday);
                         }
                         else
                         {
-                            //add new task to tomorrow tab
+                            Fragment_main2.newTask(newTaskString, everyday);
                         }
 
                         newTaskEditText.setText("");

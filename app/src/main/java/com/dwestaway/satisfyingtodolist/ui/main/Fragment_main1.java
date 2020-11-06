@@ -153,6 +153,7 @@ public class Fragment_main1 extends Fragment {
         //save the string to sharedPreferences
         editor.putString("task list", json);
         editor.apply();
+
     }
     //load tasks from local storage
     private void loadData() {

@@ -2,6 +2,10 @@ package com.dwestaway.satisfyingtodolist.ui.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +40,9 @@ public class Fragment_main1 extends Fragment {
 
     public static MainActivity mainActivity;
 
+    private SoundPool soundPool;
+    private int doneSound;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
@@ -46,8 +53,6 @@ public class Fragment_main1 extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         listView = getView().findViewById(R.id.listView);
-
-
 
         loadData();
 
@@ -62,6 +67,25 @@ public class Fragment_main1 extends Fragment {
         //set adapter to listView
         listView.setAdapter(listAdapter);
 
+        //create sound pool for done sounds, use different method depending on if build version is older than android lollipop
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(2)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        }
+        else
+        {
+            soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        }
+        doneSound = soundPool.load(getContext(), R.raw.ding, 1);
+
 
         //when a task is clicked, turn green and set task to completed, or if delete mode is enabled; delete the task
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,6 +96,9 @@ public class Fragment_main1 extends Fragment {
                 if(modelArrayList.get(position).getTaskDone() == false)
                 {
                     modelArrayList.get(position).setTaskDone(true);
+
+                    //play done sound
+                    soundPool.play(doneSound, 1, 1, 0, 0, 1);
 
                     checkIfAllTasksDone();
                 }

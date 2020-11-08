@@ -2,35 +2,27 @@ package com.dwestaway.satisfyingtodolist;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main1;
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.dwestaway.satisfyingtodolist.ui.main.SectionsPagerAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     public Boolean newTaskViewVisible = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
-
 
         //access the ConstraintLayout that holds the new task view and hide it by default
         final ConstraintLayout newTaskLayout =  findViewById(R.id.newTaskLayout);
@@ -130,4 +121,6 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
         }
     }
+
+
 }

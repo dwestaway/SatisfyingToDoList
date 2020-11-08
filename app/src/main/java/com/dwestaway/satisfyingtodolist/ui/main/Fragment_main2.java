@@ -148,15 +148,7 @@ public class Fragment_main2 extends Fragment {
 
     }
 
-
-
     public void removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
-
-        String test = taskArrayList.get(3).getTaskText();
-        int testDay = taskArrayList.get(3).getDayOfYear();
-
-        //Toast.makeText(getContext(), test + " " + Integer.toString(testDay), Toast.LENGTH_LONG).show();
-
 
 
         //get tomorrows date
@@ -193,7 +185,6 @@ public class Fragment_main2 extends Fragment {
             {
                 taskArrayList.remove(i);
             }
-
 
 
         }

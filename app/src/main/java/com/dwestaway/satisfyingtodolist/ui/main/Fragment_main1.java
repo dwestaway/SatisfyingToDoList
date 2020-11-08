@@ -73,7 +73,7 @@ public class Fragment_main1 extends Fragment {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build();
 
@@ -253,7 +253,6 @@ public class Fragment_main1 extends Fragment {
         }
     }
     public void removeTaskIfNotToday(ArrayList<ListItemModel> taskArrayList) {
-
 
         //get todays date
         int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);

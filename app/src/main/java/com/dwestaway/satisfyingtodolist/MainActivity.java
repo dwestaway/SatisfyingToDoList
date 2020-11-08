@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     public Boolean newTaskViewVisible = false;
 
-    public int currentTab = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,21 +89,18 @@ public class MainActivity extends AppCompatActivity {
                     int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
                     int year = Calendar.getInstance().get(Calendar.YEAR);
 
-                    //Toast.makeText(getApplicationContext(), Integer.toString(day) + " " + Integer.toString(month) + " " + Integer.toString(year), Toast.LENGTH_LONG).show();
-
-                    //get the current date as a string
-                    //String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
                     //if new task is not empty
                     if(!newTaskString.matches(""))
                     {
 
-                        //if "today" tab is selected
+                        //if task is set as everyday
                         if(everyday == true)
                         {
                             Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
                             Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, day + 1, year);
                         }
+                        //if "today" tab is selected
                         else if(tabs.getSelectedTabPosition() == 0)
                         {
                             Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);

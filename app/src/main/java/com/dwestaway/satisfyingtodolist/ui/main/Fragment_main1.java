@@ -224,6 +224,10 @@ public class Fragment_main1 extends Fragment {
         saveData();
 
     }
+    public static void newTaskFromTomorrow(ListItemModel task)
+    {
+        modelArrayList.add(task);
+    }
 
     /* Loop through all tasks and set colour to green if task is done, else set to grey,
         this must be called after any changes to tasks
@@ -250,23 +254,24 @@ public class Fragment_main1 extends Fragment {
     }
     public void removeTaskIfNotToday(ArrayList<ListItemModel> taskArrayList) {
 
+
         //get todays date
         int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
+        //loop through all tasks in today task list
         for(int i = 0; i < taskArrayList.size(); i++)
         {
-            //only remove tasks that are not set as everyday
-            if(taskArrayList.get(i).getEveryday() == false)
-            {
-                int taskDay = taskArrayList.get(i).getDayOfYear();
-                int taskYear = taskArrayList.get(i).getYear();
 
-                if(taskDay != day || taskYear != year)
-                {
-                    taskArrayList.remove(i);
-                }
+            int taskDay = taskArrayList.get(i).getDayOfYear();
+            int taskYear = taskArrayList.get(i).getYear();
+
+            //if task is not for todays date, remove it from list
+            if(taskDay != day || taskYear != year)
+            {
+                taskArrayList.remove(i);
             }
+
         }
     }
 

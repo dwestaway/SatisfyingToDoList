@@ -9,6 +9,9 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         final TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
 
         //access the ConstraintLayout that holds the new task view and hide it by default
         final ConstraintLayout newTaskLayout =  findViewById(R.id.newTaskLayout);
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     newTaskLayout.setVisibility(View.VISIBLE);
 
                     newTaskViewVisible = true;
+
+                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24));
                 }
                 else if(newTaskViewVisible == true)
                 {
@@ -64,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     hideKeyBoard();
 
                     newTaskViewVisible = false;
+
+                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_add_24));
 
                     String newTaskString = newTaskEditText.getText().toString();
 
@@ -108,6 +115,25 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
+
+            }
+        });
+
+        //change fab button icon to a plus when text is entered for new task
+        newTaskEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_add_24));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });

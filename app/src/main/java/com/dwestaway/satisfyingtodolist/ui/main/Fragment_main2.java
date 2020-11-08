@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Fragment_main2 extends Fragment {
 
@@ -51,8 +52,6 @@ public class Fragment_main2 extends Fragment {
 
         loadData();
 
-        //fix this, does not remember colours set
-        setTaskColours(listView);
 
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
@@ -78,7 +77,6 @@ public class Fragment_main2 extends Fragment {
 
                 checkIfAllTasksDone();
 
-                setTaskColours(parent);
 
                 saveData();
 
@@ -125,6 +123,8 @@ public class Fragment_main2 extends Fragment {
 
             modelArrayList = new ArrayList<> ();
         }
+
+        removeTaskIfNotTomorrow(modelArrayList);
     }
 
     private void checkIfAllTasksDone() {
@@ -145,34 +145,57 @@ public class Fragment_main2 extends Fragment {
         }
     }
 
-    public static void newTask(String task, Boolean everyday) {
+    public static void newTask(Context context, String task, Boolean everyday, int dayOfYear, int year) {
 
-        modelArrayList.add(new ListItemModel(task, false, everyday));
+        Boolean duplicateTask = false;
+
+        //check if task already exists
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            if(modelArrayList.get(i).getTaskText().equals(task))
+            {
+                duplicateTask = true;
+
+                Toast.makeText(context, "Task already exists", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (duplicateTask == false)
+        {
+            modelArrayList.add(new ListItemModel(task, false, everyday, dayOfYear, year));
+        }
 
         saveData();
 
     }
 
-    /* Loop through all tasks and set colour to green if task is done, else set to grey,
-        this must be called after any changes to tasks
-     */
-    private void setTaskColours(AdapterView<?> parent)
-    {
 
-        for(int i = 0; i < modelArrayList.size(); i++)
+
+    public void removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
+
+        //get tomorrows date
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1;
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        for(int i = 0; i < taskArrayList.size(); i++)
         {
-            View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
-
-            if(listItem != null)
+            //only remove tasks that are not set as everyday
+            if(taskArrayList.get(i).getEveryday() == false)
             {
-                if(modelArrayList.get(i).getTaskDone() == true)
+                int taskDay = taskArrayList.get(i).getDayOfYear();
+                int taskYear = taskArrayList.get(i).getYear();
+
+                if((taskDay == (day - 1)) && (taskYear == year))
                 {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.taskDone));
+                    //move task to today fragment list
+                    taskArrayList.remove(i);
                 }
-                else
+                else if(taskDay != day || taskYear != year)
                 {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.task));
+                    taskArrayList.remove(i);
                 }
+
+
             }
 
         }

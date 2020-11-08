@@ -7,13 +7,18 @@ public class ListItemModel {
     String taskText;
     Boolean taskDone;
     Boolean everyday;
+    int dayOfYear, year;
 
 
-    public ListItemModel(String todoText, Boolean taskDone, Boolean everyday) {
+    public ListItemModel(String todoText, Boolean taskDone, Boolean everyday, int dayOfYear, int year) {
 
         this.taskText = todoText;
         this.taskDone = taskDone;
         this.everyday = everyday;
+
+        this.dayOfYear = dayOfYear;
+        this.year = year;
+
     }
 
     public String getTaskText() {
@@ -30,5 +35,22 @@ public class ListItemModel {
 
     public Boolean getEveryday() {
         return everyday;
+    }
+
+
+    public int getDayOfYear() {
+        return dayOfYear;
+    }
+
+    public void setDayOfYear(int dayOfYear) {
+        this.dayOfYear = dayOfYear;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

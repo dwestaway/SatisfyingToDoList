@@ -23,6 +23,11 @@ import android.widget.Toast;
 
 import com.dwestaway.satisfyingtodolist.ui.main.SectionsPagerAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     public Boolean newTaskViewVisible = false;
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         //set tab text colours
         tabs.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.textGrey));
 
+        //bottom right of screen button
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     newTaskLayout.setVisibility(View.GONE);
 
+                    //hide keyboard when newTaskView is hidden
                     hideKeyBoard();
 
                     newTaskViewVisible = false;
@@ -76,7 +83,18 @@ public class MainActivity extends AppCompatActivity {
                     if(everydayCheckBox.isChecked())
                     {
                         everyday = true;
+
+                        everydayCheckBox.toggle();
                     }
+
+                    //get todays date
+                    int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+                    int year = Calendar.getInstance().get(Calendar.YEAR);
+
+                    //Toast.makeText(getApplicationContext(), Integer.toString(day) + " " + Integer.toString(month) + " " + Integer.toString(year), Toast.LENGTH_LONG).show();
+
+                    //get the current date as a string
+                    //String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
                     //if new task is not empty
                     if(!newTaskString.matches(""))
@@ -85,20 +103,22 @@ public class MainActivity extends AppCompatActivity {
                         //if "today" tab is selected
                         if(everyday == true)
                         {
-                            Fragment_main1.newTask(newTaskString, everyday);
-                            Fragment_main2.newTask(newTaskString, everyday);
+                            Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
+                            Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, day + 1, year);
                         }
                         else if(tabs.getSelectedTabPosition() == 0)
                         {
-                            Fragment_main1.newTask(newTaskString, everyday);
+                            Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
                         }
                         else
                         {
-                            Fragment_main2.newTask(newTaskString, everyday);
+                            Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, day + 1, year);
                         }
 
                         newTaskEditText.setText("");
+
                     }
+
                 }
 
 

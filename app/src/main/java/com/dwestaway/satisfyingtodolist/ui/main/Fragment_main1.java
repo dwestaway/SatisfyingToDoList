@@ -28,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class Fragment_main1 extends Fragment {
@@ -57,6 +58,7 @@ public class Fragment_main1 extends Fragment {
         loadData();
 
         //fix this, does not remember colours set
+        //does not need fixing? (8/11/2020)
         setTaskColours(listView);
 
         //get main activity to access variables from it
@@ -176,6 +178,9 @@ public class Fragment_main1 extends Fragment {
 
             modelArrayList = new ArrayList<> ();
         }
+
+        removeTaskIfNotToday(modelArrayList);
+
     }
 
     private void checkIfAllTasksDone() {
@@ -196,9 +201,25 @@ public class Fragment_main1 extends Fragment {
         }
     }
 
-    public static void newTask(String task, Boolean everyday) {
+    public static void newTask(Context context, String task, Boolean everyday, int dayOfYear, int year) {
 
-        modelArrayList.add(new ListItemModel(task, false, everyday));
+        Boolean duplicateTask = false;
+
+        //check if task already exists
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            if(modelArrayList.get(i).getTaskText().equals(task))
+            {
+                duplicateTask = true;
+
+                Toast.makeText(context, "Task already exists", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (duplicateTask == false)
+        {
+            modelArrayList.add(new ListItemModel(task, false, everyday, dayOfYear, year));
+        }
 
         saveData();
 
@@ -225,7 +246,27 @@ public class Fragment_main1 extends Fragment {
                     listItem.setBackgroundColor(getResources().getColor(R.color.task));
                 }
             }
+        }
+    }
+    public void removeTaskIfNotToday(ArrayList<ListItemModel> taskArrayList) {
 
+        //get todays date
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        for(int i = 0; i < taskArrayList.size(); i++)
+        {
+            //only remove tasks that are not set as everyday
+            if(taskArrayList.get(i).getEveryday() == false)
+            {
+                int taskDay = taskArrayList.get(i).getDayOfYear();
+                int taskYear = taskArrayList.get(i).getYear();
+
+                if(taskDay != day || taskYear != year)
+                {
+                    taskArrayList.remove(i);
+                }
+            }
         }
     }
 

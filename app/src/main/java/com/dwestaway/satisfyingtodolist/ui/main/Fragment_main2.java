@@ -52,9 +52,10 @@ public class Fragment_main2 extends Fragment {
 
         loadData();
 
-
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
+
+        saveData();
 
         //setup adapter
         listAdapter = new ListAdapter(getActivity(), modelArrayList);

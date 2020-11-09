@@ -64,10 +64,13 @@ public class Fragment_main1 extends Fragment {
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
 
+        saveData();
+
         //setup adapter
         listAdapter = new ListAdapter(getActivity(), modelArrayList);
         //set adapter to listView
         listView.setAdapter(listAdapter);
+
 
         //create sound pool for done sounds, use different method depending on if build version is older than android lollipop
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -179,7 +182,8 @@ public class Fragment_main1 extends Fragment {
             modelArrayList = new ArrayList<> ();
         }
 
-        removeTaskIfNotToday(modelArrayList);
+        modelArrayList = removeTasksIfNotToday(modelArrayList);
+
 
     }
 
@@ -226,7 +230,24 @@ public class Fragment_main1 extends Fragment {
     }
     public static void newTaskFromTomorrow(ListItemModel task)
     {
-        modelArrayList.add(task);
+
+        String newTaskName = task.getTaskText();
+
+        Boolean duplicateTask = false;
+
+        //check if new task is the same as any current tasks
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            if(modelArrayList.get(i).getTaskText().equals(newTaskName))
+            {
+                duplicateTask = true;
+            }
+        }
+        if(duplicateTask == false)
+        {
+            modelArrayList.add(task);
+        }
+
     }
 
     /* Loop through all tasks and set colour to green if task is done, else set to grey,
@@ -252,11 +273,18 @@ public class Fragment_main1 extends Fragment {
             }
         }
     }
-    public void removeTaskIfNotToday(ArrayList<ListItemModel> taskArrayList) {
+    //loop through task array list and put tasks that match todays date into a new array list, return new array list
+    public ArrayList<ListItemModel> removeTasksIfNotToday(ArrayList<ListItemModel> taskArrayList) {
 
         //get todays date
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) ;
         int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
+
+        //Toast.makeText(getContext(), Integer.toString(day), Toast.LENGTH_LONG).show();
+
+        //Toast.makeText(getContext(), taskArrayList.get(0).getTaskText() + Integer.toString(taskArrayList.get(0).getDayOfYear()), Toast.LENGTH_LONG).show();
 
         //loop through all tasks in today task list
         for(int i = 0; i < taskArrayList.size(); i++)
@@ -266,12 +294,16 @@ public class Fragment_main1 extends Fragment {
             int taskYear = taskArrayList.get(i).getYear();
 
             //if task is not for todays date, remove it from list
-            if(taskDay != day || taskYear != year)
+            if(taskYear == year)
             {
-                taskArrayList.remove(i);
+                if(taskDay == day)
+                {
+                    newTaskArrayList.add(taskArrayList.get(i));
+                }
             }
 
         }
+        return newTaskArrayList;
     }
 
 

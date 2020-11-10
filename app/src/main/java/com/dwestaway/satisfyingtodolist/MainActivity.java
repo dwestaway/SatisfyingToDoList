@@ -1,12 +1,20 @@
 package com.dwestaway.satisfyingtodolist;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main1;
 import com.dwestaway.satisfyingtodolist.ui.main.Fragment_main2;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.loader.content.AsyncTaskLoader;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Boolean newTaskViewVisible = false;
 
-
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
         //set tab text colours
         tabs.setTabTextColors(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.textGrey));
 
+
+        //initalize admob banner ad
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        final AdRequest adRequest = new AdRequest.Builder().build();
+
+
         //bottom right of screen button
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
                     newTaskViewVisible = true;
 
+                    //hide ad when new task view is shown
+                    mAdView.destroy();
+                    mAdView.setVisibility(View.GONE);
+
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24));
                 }
                 else if(newTaskViewVisible == true)
@@ -67,8 +90,13 @@ public class MainActivity extends AppCompatActivity {
 
                     //hide keyboard when newTaskView is hidden
                     hideKeyBoard();
+                    dismissKeyboard(MainActivity.this);
 
                     newTaskViewVisible = false;
+
+                    //load and show ad when new task view is hidden
+                    mAdView.loadAd(adRequest);
+                    mAdView.setVisibility(View.VISIBLE);
 
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_add_24));
 
@@ -116,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
             }
         });
 
@@ -138,12 +167,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+
 
     public void hideKeyBoard() {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    //second hide keyboard method because first does not always work
+    public void dismissKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != activity.getCurrentFocus())
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus()
+                    .getApplicationWindowToken(), 0);
     }
 
 

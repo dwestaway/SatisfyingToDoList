@@ -122,7 +122,7 @@ public class Fragment_main2 extends Fragment {
             modelArrayList = new ArrayList<> ();
         }
 
-        removeTaskIfNotTomorrow(modelArrayList);
+        modelArrayList = removeTaskIfNotTomorrow(modelArrayList);
     }
 
     public static void newTask(Context context, String task, Boolean everyday, int dayOfYear, int year) {
@@ -149,45 +149,42 @@ public class Fragment_main2 extends Fragment {
 
     }
 
-    public void removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
+    public ArrayList<ListItemModel> removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
 
 
         //get tomorrows date
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1;
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int tomorrow = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1;
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
+        ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
+
         //loop through all tasks in tomorrow task list
-        for(int i = 0; i < taskArrayList.size(); i++)
-        {
+        for (int i = 0; i < taskArrayList.size(); i++) {
 
-            int taskDay = taskArrayList.get(i).getDayOfYear();
-            int taskYear = taskArrayList.get(i).getYear();
+            ListItemModel task = taskArrayList.get(i);
 
-            //if task is for today, send to today list and remove from tomorrow list
-            if((taskDay == day - 1) && (taskYear == year))
+            int taskDay = task.getDayOfYear();
+            int taskYear = task.getYear();
+
+            if (taskDay == tomorrow && taskYear == year)
             {
-                //when sending any task to today list, change the date day by minus 1 so the date is correct and will work with date check in today fragment
-                taskArrayList.get(i).setDayOfYear(taskArrayList.get(i).getDayOfYear() - 1);
+                newTaskArrayList.add(task);
 
-                //if task is not an every day task; move it to today fragment list and remove from tomorrow list
-                if(taskArrayList.get(i).getEveryday() == false)
-                {
-                    Fragment_main1.newTaskFromTomorrow(taskArrayList.get(i));
-                    taskArrayList.remove(i);
-                }
-                //if task is every day task; move it to today fragment list and keep it in tomorrow list
-                else if (taskArrayList.get(i).getEveryday() == true)
-                {
-                    Fragment_main1.newTaskFromTomorrow(taskArrayList.get(i));
+            }
+            else if (taskDay == today && taskYear == year)
+            {
+                Fragment_main1.modelArrayList.add(task);
+
+                if (task.getEveryday() == true) {
+                    task.setDayOfYear(task.getDayOfYear() + 1);
+
+                    newTaskArrayList.add(task);
                 }
             }
-            //if task isnt for tomorrow, remove it
-            else if(taskDay != day || taskYear != year)
-            {
-                taskArrayList.remove(i);
-            }
-
-
         }
+
+        //return updated task list without any out of date tasks
+        return newTaskArrayList;
     }
 }

@@ -35,7 +35,7 @@ public class Fragment_main1 extends Fragment {
 
     private ListView listView;
 
-    private static ArrayList<ListItemModel> modelArrayList;
+    public static ArrayList<ListItemModel> modelArrayList;
 
     private ListAdapter listAdapter;
 
@@ -228,27 +228,6 @@ public class Fragment_main1 extends Fragment {
         saveData();
 
     }
-    public static void newTaskFromTomorrow(ListItemModel task)
-    {
-
-        String newTaskName = task.getTaskText();
-
-        Boolean duplicateTask = false;
-
-        //check if new task is the same as any current tasks
-        for(int i = 0; i < modelArrayList.size(); i++)
-        {
-            if(modelArrayList.get(i).getTaskText().equals(newTaskName))
-            {
-                duplicateTask = true;
-            }
-        }
-        if(duplicateTask == false)
-        {
-            modelArrayList.add(task);
-        }
-
-    }
 
     /* Loop through all tasks and set colour to green if task is done, else set to grey,
         this must be called after any changes to tasks
@@ -256,22 +235,26 @@ public class Fragment_main1 extends Fragment {
     private void setTaskColours(AdapterView<?> parent)
     {
 
-        for(int i = 0; i < modelArrayList.size(); i++)
+        if(modelArrayList != null)
         {
-            View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
-
-            if(listItem != null)
+            for(int i = 0; i < modelArrayList.size(); i++)
             {
-                if(modelArrayList.get(i).getTaskDone() == true)
+                View listItem = parent.getChildAt(parent.getFirstVisiblePosition() + i);
+
+                if(listItem != null)
                 {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.taskDone));
-                }
-                else
-                {
-                    listItem.setBackgroundColor(getResources().getColor(R.color.task));
+                    if(modelArrayList.get(i).getTaskDone() == true)
+                    {
+                        listItem.setBackgroundColor(getResources().getColor(R.color.taskDone));
+                    }
+                    else
+                    {
+                        listItem.setBackgroundColor(getResources().getColor(R.color.task));
+                    }
                 }
             }
         }
+
     }
     //loop through task array list and put tasks that match todays date into a new array list, return new array list
     public ArrayList<ListItemModel> removeTasksIfNotToday(ArrayList<ListItemModel> taskArrayList) {

@@ -34,7 +34,7 @@ public class Fragment_main2 extends Fragment {
 
     private static ArrayList<ListItemModel> modelArrayList;
 
-    private ListAdapter listAdapter;
+    public static ListAdapter listAdapter;
 
     public static MainActivity mainActivity;
 
@@ -145,6 +145,8 @@ public class Fragment_main2 extends Fragment {
             modelArrayList.add(new ListItemModel(task, false, everyday, dayOfYear, year));
         }
 
+        listAdapter.notifyDataSetChanged();
+
         saveData();
 
     }
@@ -160,27 +162,34 @@ public class Fragment_main2 extends Fragment {
         ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
 
         //loop through all tasks in tomorrow task list
-        for (int i = 0; i < taskArrayList.size(); i++) {
+        for (int i = 0; i < taskArrayList.size(); i++)
+        {
 
             ListItemModel task = taskArrayList.get(i);
 
             int taskDay = task.getDayOfYear();
             int taskYear = task.getYear();
 
-            if (taskDay == tomorrow && taskYear == year)
+            //if task is everyday, add it to new arraylist and send to todays tasks
+            if(task.getEveryday() == true)
+            {
+                task.setDayOfYear(tomorrow);
+
+                newTaskArrayList.add(task);
+
+                task.setDayOfYear(today);
+
+                Fragment_main1.newTaskFromTomorrow(task);
+            }
+            else if (taskDay == tomorrow && taskYear == year)
             {
                 newTaskArrayList.add(task);
 
             }
             else if (taskDay == today && taskYear == year)
             {
-                Fragment_main1.modelArrayList.add(task);
+                Fragment_main1.newTaskFromTomorrow(task);
 
-                if (task.getEveryday() == true) {
-                    task.setDayOfYear(task.getDayOfYear() + 1);
-
-                    newTaskArrayList.add(task);
-                }
             }
         }
 

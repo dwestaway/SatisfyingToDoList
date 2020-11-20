@@ -120,21 +120,27 @@ public class MainActivity extends AppCompatActivity {
                     if(!newTaskString.matches(""))
                     {
 
+                        int tomorrow = day + 1;
+
                         //if task is set as everyday
                         if(everyday == true)
                         {
                             Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
-                            Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, day + 1, year);
+                            Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, tomorrow, year);
                         }
-                        //if "today" tab is selected
-                        else if(tabs.getSelectedTabPosition() == 0)
+                        else if (everyday == false)
                         {
-                            Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
+                            //if "today" tab is selected
+                            if(tabs.getSelectedTabPosition() == 0)
+                            {
+                                Fragment_main1.newTask(getApplicationContext(), newTaskString, everyday, day, year);
+                            }
+                            else if(tabs.getSelectedTabPosition() == 1)
+                            {
+                                Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, tomorrow, year);
+                            }
                         }
-                        else
-                        {
-                            Fragment_main2.newTask(getApplicationContext(), newTaskString, everyday, day + 1, year);
-                        }
+
 
                         newTaskEditText.setText("");
 

@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class Fragment_main1 extends Fragment {
@@ -37,7 +38,7 @@ public class Fragment_main1 extends Fragment {
 
     public static ArrayList<ListItemModel> modelArrayList;
 
-    private ListAdapter listAdapter;
+    public static ListAdapter listAdapter;
 
     public static MainActivity mainActivity;
 
@@ -182,7 +183,7 @@ public class Fragment_main1 extends Fragment {
             modelArrayList = new ArrayList<> ();
         }
 
-        modelArrayList = removeTasksIfNotToday(modelArrayList);
+        removeTasksIfNotToday();
 
 
     }
@@ -225,8 +226,35 @@ public class Fragment_main1 extends Fragment {
             modelArrayList.add(new ListItemModel(task, false, everyday, dayOfYear, year));
         }
 
+        listAdapter.notifyDataSetChanged();
+
         saveData();
 
+    }
+    public static void newTaskFromTomorrow(ListItemModel task)
+    {
+        Boolean duplicateTask = false;
+
+        String newTaskText = task.getTaskText();
+
+        //loop through all today tasks
+        for(int i = 0; i < modelArrayList.size(); i++)
+        {
+            //if new task is the same as an already existing task
+            if(modelArrayList.get(i).getTaskText().equals(newTaskText))
+            {
+                duplicateTask = true;
+
+            }
+        }
+        if (duplicateTask == false)
+        {
+            modelArrayList.add(task);
+        }
+
+        listAdapter.notifyDataSetChanged();
+
+        saveData();
     }
 
     /* Loop through all tasks and set colour to green if task is done, else set to grey,
@@ -256,37 +284,39 @@ public class Fragment_main1 extends Fragment {
         }
 
     }
-    //loop through task array list and put tasks that match todays date into a new array list, return new array list
-    public ArrayList<ListItemModel> removeTasksIfNotToday(ArrayList<ListItemModel> taskArrayList) {
+    //loop through task array list and remove tasks that do not match todays date
+    public void removeTasksIfNotToday() {
 
         //get todays date
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) ;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
+        //ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
 
-        //Toast.makeText(getContext(), Integer.toString(day), Toast.LENGTH_LONG).show();
-
-        //Toast.makeText(getContext(), taskArrayList.get(0).getTaskText() + Integer.toString(taskArrayList.get(0).getDayOfYear()), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Current day " + Integer.toString(day), Toast.LENGTH_LONG).show();
 
         //loop through all tasks in today task list
-        for(int i = 0; i < taskArrayList.size(); i++)
+        for(int i = 0; i < modelArrayList.size(); i++)
         {
+            //String taskText = modelArrayList.get(i).getTaskText();
+            //modelArrayList.get(i).setTaskText(taskText + Integer.toString(day));
 
-            int taskDay = taskArrayList.get(i).getDayOfYear();
-            int taskYear = taskArrayList.get(i).getYear();
+            int taskDay = modelArrayList.get(i).getDayOfYear();
+            int taskYear = modelArrayList.get(i).getYear();
 
             //if task is not for todays date, remove it from list
-            if(taskYear == year)
+            if(taskYear != year)
             {
-                if(taskDay == day)
-                {
-                    newTaskArrayList.add(taskArrayList.get(i));
-                }
+                modelArrayList.remove(i);
+                //newTaskArrayList.add(taskArrayList.get(i));
+            }
+            else if(taskDay != day)
+            {
+                modelArrayList.remove(i);
             }
 
         }
-        return newTaskArrayList;
+        //return newTaskArrayList;
     }
 
 

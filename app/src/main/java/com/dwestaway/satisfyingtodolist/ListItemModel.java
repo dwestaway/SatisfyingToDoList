@@ -21,6 +21,10 @@ public class ListItemModel {
 
     }
 
+    public void setTaskText(String taskText) {
+        this.taskText = taskText;
+    }
+
     public String getTaskText() {
         return taskText;
     }

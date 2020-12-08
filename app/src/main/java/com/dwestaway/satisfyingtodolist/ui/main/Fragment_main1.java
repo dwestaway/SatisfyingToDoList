@@ -56,14 +56,16 @@ public class Fragment_main1 extends Fragment {
 
         listView = getView().findViewById(R.id.listView);
 
+        //get main activity to access variables from it
+        mainActivity = (MainActivity) getActivity();
+
         loadData();
 
         //fix this, does not remember colours set
         //does not need fixing? (8/11/2020)
         setTaskColours(listView);
 
-        //get main activity to access variables from it
-        mainActivity = (MainActivity) getActivity();
+
 
         saveData();
 
@@ -183,7 +185,9 @@ public class Fragment_main1 extends Fragment {
             modelArrayList = new ArrayList<> ();
         }
 
-        removeTasksIfNotToday();
+        modelArrayList = removeTasksIfNotToday(modelArrayList);
+
+        Fragment_main2.loadData(sharedPreferences);
 
 
     }
@@ -252,7 +256,11 @@ public class Fragment_main1 extends Fragment {
             modelArrayList.add(task);
         }
 
-        listAdapter.notifyDataSetChanged();
+        if(listAdapter != null)
+        {
+            listAdapter.notifyDataSetChanged();
+        }
+
 
         saveData();
     }
@@ -285,15 +293,17 @@ public class Fragment_main1 extends Fragment {
 
     }
     //loop through task array list and remove tasks that do not match todays date
-    public void removeTasksIfNotToday() {
+    public ArrayList<ListItemModel> removeTasksIfNotToday(ArrayList<ListItemModel> modelArrayList) {
 
         //get todays date
         int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        //ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
+        ArrayList<ListItemModel> newTaskArrayList = new ArrayList<>();
 
         //Toast.makeText(getContext(), "Current day " + Integer.toString(day), Toast.LENGTH_LONG).show();
+
+
 
         //loop through all tasks in today task list
         for(int i = 0; i < modelArrayList.size(); i++)
@@ -304,19 +314,15 @@ public class Fragment_main1 extends Fragment {
             int taskDay = modelArrayList.get(i).getDayOfYear();
             int taskYear = modelArrayList.get(i).getYear();
 
-            //if task is not for todays date, remove it from list
-            if(taskYear != year)
+            //if task date is equal to todays date, add to newTaskArrayList
+            if(taskDay == day && taskYear == year)
             {
-                modelArrayList.remove(i);
-                //newTaskArrayList.add(taskArrayList.get(i));
-            }
-            else if(taskDay != day)
-            {
-                modelArrayList.remove(i);
+                newTaskArrayList.add(modelArrayList.get(i));
             }
 
+
         }
-        //return newTaskArrayList;
+        return newTaskArrayList;
     }
 
 

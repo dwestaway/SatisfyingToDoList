@@ -50,7 +50,7 @@ public class Fragment_main2 extends Fragment {
 
         listView = getView().findViewById(R.id.listView);
 
-        loadData();
+        //loadData();
 
         //get main activity to access variables from it
         mainActivity = (MainActivity) getActivity();
@@ -88,7 +88,7 @@ public class Fragment_main2 extends Fragment {
     private static void saveData() {
 
         //get instance of sharedPreferences
-        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences2", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
@@ -101,10 +101,10 @@ public class Fragment_main2 extends Fragment {
         editor.apply();
     }
     //load tasks from local storage
-    private void loadData() {
+    public  static void loadData(SharedPreferences sharedPreferences) {
 
         //get instance of sharedPreferences
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        //SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences2", Context.MODE_PRIVATE);
 
         Gson gson = new Gson();
 
@@ -151,7 +151,7 @@ public class Fragment_main2 extends Fragment {
 
     }
 
-    public ArrayList<ListItemModel> removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
+    public static ArrayList<ListItemModel> removeTaskIfNotTomorrow(ArrayList<ListItemModel> taskArrayList) {
 
 
         //get tomorrows date
@@ -173,7 +173,7 @@ public class Fragment_main2 extends Fragment {
             //if task is everyday, add it to new arraylist and send to todays tasks
             if(task.getEveryday() == true)
             {
-                task.setDayOfYear(tomorrow);
+                //task.setDayOfYear(tomorrow);
 
                 newTaskArrayList.add(task);
 

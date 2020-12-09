@@ -88,7 +88,7 @@ public class Fragment_main2 extends Fragment {
     private static void saveData() {
 
         //get instance of sharedPreferences
-        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences2", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
